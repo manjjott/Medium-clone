@@ -82,8 +82,19 @@ blogRouter.put("/", async (c) => {
   }
 });
 
-blogRouter.delete("/:id", (c) => {
-  return c.text("Delete Blog Page");
+blogRouter.delete("/:id", async (c) => {
+  const prisma = getPrisma(c.env.DATABASE_URL);
+
+  try {
+    const blog = await prisma.blog.delete({
+      where: {
+        id: c.req.param("id"),
+      },
+    });
+    return c.json({ message: "Blog page deleted" });
+  } catch (e) {
+    c.text("Error deleting blog page");
+  }
 });
 
 blogRouter.get("/:id", async (c) => {
@@ -101,7 +112,13 @@ blogRouter.get("/:id", async (c) => {
 });
 
 blogRouter.get("/bulk", (c) => {
-  return c.json({message: "get all the blogs"});
+  const prisma = getPrisma(c.env.DATABASE_URL);
+  
+  try {
+    const blogs = prisma.blog.findMany();
+    return c.json({ blogs: blogs });
+  } catch (e) {}
+  return c.json({ message: "get all the blogs" });
 });
 
 export default blogRouter;
