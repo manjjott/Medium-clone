@@ -101,7 +101,7 @@ blogRouter.get("/:id", async (c) => {
 });
 
 blogRouter.get("/bulk", (c) => {
-  return c.text("get all the blogs");
+  return c.json({message: "get all the blogs"});
 });
 
 export default blogRouter;
