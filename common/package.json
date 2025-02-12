@@ -1,19 +1,22 @@
 {
   "name": "@manjjott/common",
-  "version": "1.0.0",
+  "version": "1.0.2",
+  "description": "Common utilities for frontend and backend",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["common", "utilities"],
+  "author": "Your Name",
   "license": "ISC",
   "private": false,
-  "publishConfig": {
-  "registry": "https://npm.pkg.github.com/"
-},
-  "types": "dist/index.d.ts",
-  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/common-module.git"
+  },
   "dependencies": {
     "zod": "^3.24.2"
   },

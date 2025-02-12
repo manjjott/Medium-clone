@@ -1,7 +1,9 @@
 import { Hono } from "hono";
 import { getPrisma } from "../prismaFucntion";
 import { sign } from "hono/jwt";
-import { signInInput, signUpInput } from "../../../common/src/userSchema";
+import { signInInput, signUpInput } from "@manjjott/common";
+
+
 const userRouter = new Hono<{
   Bindings: {
     DATABASE_URL: string;
@@ -11,6 +13,10 @@ const userRouter = new Hono<{
 
 userRouter.post("/signup", async (c) => {
   const body = await c.req.json();
+  const { success } = signUpInput.safeParse(body);
+  if (!success) {
+    return c.json({ error: "Invalid input" });
+  }
   const { email, name, password } = body;
   const prisma = getPrisma(c.env.DATABASE_URL);
 
@@ -35,6 +41,10 @@ userRouter.post("/signup", async (c) => {
 
 userRouter.post("/signin", async (c) => {
   const body = await c.req.json();
+  const { success } = signInInput.safeParse(body);
+  if (!success) {
+    return c.json({ error: "Invalid input" });
+  }
   const { email, password } = body;
   const prisma = getPrisma(c.env.DATABASE_URL);
   try {
