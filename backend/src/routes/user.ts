@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { getPrisma } from "../prismaFucntion";
 import { sign } from "hono/jwt";
-
+import { signInInput, signUpInput } from "../../../common/src/userSchema";
 const userRouter = new Hono<{
   Bindings: {
     DATABASE_URL: string;

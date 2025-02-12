@@ -89,11 +89,12 @@ blogRouter.delete("/:id", async (c) => {
     const blog = await prisma.blog.delete({
       where: {
         id: c.req.param("id"),
+        authorId: c.get("userId"),
       },
     });
     return c.json({ message: "Blog page deleted" });
   } catch (e) {
-    c.text("Error deleting blog page");
+    return c.json({ error: "Error deleting blog page" + e });
   }
 });
 
@@ -111,11 +112,10 @@ blogRouter.get("/:id", async (c) => {
   }
 });
 
-blogRouter.get("/bulk", (c) => {
+blogRouter.get("/bulk", async (c) => {
   const prisma = getPrisma(c.env.DATABASE_URL);
-  
   try {
-    const blogs = prisma.blog.findMany();
+    const blogs = await prisma.blog.findMany();
     return c.json({ blogs: blogs });
   } catch (e) {}
   return c.json({ message: "get all the blogs" });
