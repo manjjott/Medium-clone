@@ -4,7 +4,7 @@ import axios from "axios";
 import LabelledInput from "./auth/LabelledInput";
 import { Quote } from "./Quote";
 import { BACKEND_URL } from "../config";
-import { SignInInput } from "@manjjott/common";
+import { signInInput, SignInInput } from "@manjjott/common";
 
 export default function Signin() {
   const [signinInputs, setSigninInputs] = useState<SignInInput>({
@@ -15,6 +15,12 @@ export default function Signin() {
   const navigate = useNavigate();
 
   const handleSignin = async () => {
+    // validation from zod
+    const { success, error } = signInInput.safeParse(signinInputs);
+    if (!success) {
+      alert("Invalid Input" + error.errors[0].message);
+      return;
+    }
     try {
       const response = await axios.post(
         `${BACKEND_URL}/api/v1/user/signin`,
@@ -23,7 +29,7 @@ export default function Signin() {
       const jwt = response.data;
       console.log(response.data);
       localStorage.setItem("token", jwt);
-      navigate("/blog");
+      navigate("/blogs");
     } catch (e) {
       alert("Error signing in");
     }
